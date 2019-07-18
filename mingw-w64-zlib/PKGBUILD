@@ -58,7 +58,7 @@ build() {
   CHOST=${MINGW_CHOST} \
   ../${_realname}-${pkgver}/configure \
     --prefix=${MINGW_PREFIX} \
-    --shared
+    --static
 
   make
 
