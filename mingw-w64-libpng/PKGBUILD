@@ -36,7 +36,7 @@ build() {
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --prefix=${MINGW_PREFIX} \
-    --enable-shared --enable-static \
+    --enable-shared=no --enable-static \
     as_ln_s="cp -pR"
   make
   msg2 "Build contributed programs"
