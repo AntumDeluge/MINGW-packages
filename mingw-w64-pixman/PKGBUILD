@@ -33,7 +33,7 @@ build() {
   ${MINGW_PREFIX}/bin/meson \
     --prefix="${MINGW_PREFIX}" \
     --buildtype plain \
-    -Ddefault_library=both \
+    -Ddefault_library=static \
     -Dgtk=disabled \
     ../${_realname}-${pkgver}
 
