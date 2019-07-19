@@ -10,7 +10,11 @@ pkgdesc="An XML parser library (mingw-w64)"
 arch=('any')
 url="https://libexpat.github.io/"
 license=(MIT)
-makedepends=("${MINGW_PACKAGE_PREFIX}-gcc" "${MINGW_PACKAGE_PREFIX}-pkg-config")
+makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
+             "${MINGW_PACKAGE_PREFIX}-pkg-config"
+             "autoconf"
+             "automake-wrapper"
+             "${MINGW_PACKAGE_PREFIX}-libtool")
 options=('strip' 'staticlibs')
 source=("https://downloads.sourceforge.net/${_realname}/${_realname}-${pkgver}.tar.bz2"
         002-fix-tests.patch)
