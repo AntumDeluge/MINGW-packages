@@ -38,20 +38,12 @@ build() {
     --target=${MINGW_CHOST}
 
   make
-  # Build a shared library.  No need for -fPIC on Windows.
-  ${CC} -shared \
-    -Wl,--out-implib,libtermcap.dll.a \
-    -o libtermcap-0.dll \
-    termcap.o tparam.o version.o
 }
 
 package() {
   cd  ${srcdir}/build-${MSYSTEM}
   make install prefix="${pkgdir}${MINGW_PREFIX}" exec_prefix="${pkgdir}${MINGW_PREFIX}" oldincludedir=
   rm -r "${pkgdir}"${MINGW_PREFIX}/info/
-  mkdir -p "${pkgdir}"${MINGW_PREFIX}/{bin,lib}
-  install -m 0755 libtermcap-0.dll "${pkgdir}${MINGW_PREFIX}/bin"
-  install -m 0644 libtermcap.dll.a "${pkgdir}${MINGW_PREFIX}/lib"
 
   # pkg-config
   mkdir -p "${pkgdir}${MINGW_PREFIX}/lib/pkgconfig"
