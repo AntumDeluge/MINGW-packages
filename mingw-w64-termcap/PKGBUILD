@@ -32,19 +32,19 @@ build() {
 
   make
   # Build a shared library.  No need for -fPIC on Windows.
-  ${MINGW_PREFIX}/bin/gcc -shared \
-    -Wl,--out-implib,libtermcap.dll.a \
-    -o libtermcap-0.dll \
-    termcap.o tparam.o version.o
+  # ${MINGW_PREFIX}/bin/gcc -shared \
+    # -Wl,--out-implib,libtermcap.dll.a \
+    # -o libtermcap-0.dll \
+    # termcap.o tparam.o version.o
 }
 
 package() {
   cd  ${srcdir}/build-${MINGW_CHOST}
   make install prefix="${pkgdir}${MINGW_PREFIX}" exec_prefix="${pkgdir}${MINGW_PREFIX}" oldincludedir=
   rm -r "${pkgdir}"${MINGW_PREFIX}/info/
-  mkdir -p "${pkgdir}"${MINGW_PREFIX}/{bin,lib}
-  install -m 0755 libtermcap-0.dll "${pkgdir}${MINGW_PREFIX}/bin"
-  install -m 0644 libtermcap.dll.a "${pkgdir}${MINGW_PREFIX}/lib"
+  # mkdir -p "${pkgdir}"${MINGW_PREFIX}/{bin,lib}
+  # install -m 0755 libtermcap-0.dll "${pkgdir}${MINGW_PREFIX}/bin"
+  # install -m 0644 libtermcap.dll.a "${pkgdir}${MINGW_PREFIX}/lib"
 
   # pkg-config
   mkdir -p "${pkgdir}${MINGW_PREFIX}/lib/pkgconfig"
@@ -59,4 +59,3 @@ URL: ${url}\n\
 Version: ${pkgver}\n\
 Libs: -L\${libdir} -ltermcap\n\
 Cflags: -I\${includedir}" > "${pkgdir}${MINGW_PREFIX}/lib/pkgconfig/termcap.pc"
-}
