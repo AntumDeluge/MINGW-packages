@@ -29,7 +29,9 @@ build() {
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --disable-rpath \
-    --disable-lzma-links
+    --disable-lzma-links \
+    --enable-shared=no \
+    --enable-static=yes
 
   make
 }
