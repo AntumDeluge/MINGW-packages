@@ -40,6 +40,7 @@ build() {
     -G"MSYS Makefiles" \
     -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
     -DWITH_JPEG8=ON \
+    -DENABLE_SHARED=FALSE \
     ../${_realname}-${pkgver}
 
   make
