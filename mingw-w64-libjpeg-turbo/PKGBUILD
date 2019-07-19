@@ -52,6 +52,7 @@ build() {
     -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
     -DCMAKE_BUILD_TYPE=${_build_type} \
     -DWITH_JPEG8=ON \
+    -DENABLE_SHARED=FALSE \
     ../${_realname}-${pkgver}
 
   ${MINGW_PREFIX}/bin/cmake.exe --build .
