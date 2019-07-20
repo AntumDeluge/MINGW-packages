@@ -51,7 +51,7 @@ build() {
     --target=${MINGW_CHOST} \
     --prefix=${MINGW_PREFIX} \
     --enable-static \
-    --enable-shared \
+    --enable-shared=no \
     --with-zlib \
     --with-bzip2 \
     --with-png \
