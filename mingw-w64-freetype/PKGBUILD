@@ -73,6 +73,8 @@ build() {
       --wrap-mode=nodownload \
       --auto-features=enabled \
       --default-library=both \
+			--enable-static \
+			--disable-shared \
       "${extra_config[@]}" \
       ../${_realname}-${pkgver}
 
