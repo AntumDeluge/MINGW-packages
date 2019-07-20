@@ -125,35 +125,36 @@ build() {
     CFLAGS="${CFLAGS} -DLIBXML_STATIC_FOR_DLL -DNOLIBTOOL"
   make
 
-  # Shared build
-  _setup_shared 2
-  make
-  # A little trick from Cygwin because we only want the Python3 bindings
-  _setup_shared 3
-  make -C python top_builddir=${srcdir}/build-shared-${CARCH}-py2
+  # # Shared build
+  # _setup_shared 2
+  # make
+  # # A little trick from Cygwin because we only want the Python3 bindings
+  # _setup_shared 3
+  # make -C python top_builddir=${srcdir}/build-shared-${CARCH}-py2
 }
 
-check() {
-  cd ${srcdir}/build-shared-${CARCH}-py2
-  cp -r ../xmlconf .
-  make check
-}
+# check() {
+  # cd ${srcdir}/build-shared-${CARCH}-py2
+  # cp -r ../xmlconf .
+  # make check
+# }
 
 package() {
   # First install shared
-  cd ${srcdir}/build-shared-${CARCH}-py2
+  #cd ${srcdir}/build-shared-${CARCH}-py2
 
-  make install DESTDIR="${pkgdir}"
+  #make install DESTDIR="${pkgdir}"
 
   # Then install python bindings for Python3
-  make -C "${srcdir}/build-shared-${CARCH}-py3/python" DESTDIR="$pkgdir" install
+  #make -C "${srcdir}/build-shared-${CARCH}-py3/python" DESTDIR="$pkgdir" install
 
   # then manually install static
   cd ${srcdir}/build-static-${CARCH}
 
-  install -m 0644 .libs/libxml2.a "${pkgdir}${MINGW_PREFIX}"/lib/
+  make install DESTDIR="${pkgdir}"
+  #install -m 0644 .libs/libxml2.a "${pkgdir}${MINGW_PREFIX}"/lib/
 
-  rm "${pkgdir}${MINGW_PREFIX}"/lib/python2.7/site-packages/*.a
+  #rm "${pkgdir}${MINGW_PREFIX}"/lib/python2.7/site-packages/*.a
 
   # License
   install -Dm644 "${srcdir}/${_realname}-${pkgver}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
