@@ -108,47 +108,13 @@ build() {
     --with-threads=win32 \
     CFLAGS="${CFLAGS} -DLIBXML_STATIC_FOR_DLL -DNOLIBTOOL"
   make
-
-  # Shared build
-  msg2 "Building shared with Python ext ${MSYSTEM}"
-  [[ -d "${srcdir}"/build-shared-${MSYSTEM} ]] && rm -rf "${srcdir}"/build-shared-${MSYSTEM}
-  mkdir -p ${srcdir}/build-shared-${MSYSTEM} && cd ${srcdir}/build-shared-${MSYSTEM}
-  ../${_realname}-${pkgver}/configure \
-    --prefix=${MINGW_PREFIX} \
-    --host=${MINGW_CHOST} \
-    --target=${MINGW_CHOST} \
-    --build="${MINGW_CHOST}" \
-    --with-python=${MINGW_PREFIX}/bin/python \
-    --with-modules \
-    --disable-static \
-    --enable-shared \
-    --with-threads=win32
-
-  # Hack for mingw python
-  local PREFIX_DEPS=$(cygpath -am ${MINGW_PREFIX})
-  find . -type f -name "Makefile" -exec sed -i "s|${PREFIX_DEPS}|${MINGW_PREFIX}|g" {} \;
-  make
-}
-
-check() {
-  cd ${srcdir}/build-shared-${MSYSTEM}
-  cp -r ../xmlconf .
-  make check
 }
 
 package() {
   # First install shared
-  cd ${srcdir}/build-shared-${MSYSTEM}
-
-  make install DESTDIR="${pkgdir}"
-
-  MSYS2_ARG_CONV_EXCL="-p" python -m compileall \
-    -o 0 -o 1 -q -s"${pkgdir}" -p"/" "${pkgdir}${MINGW_PREFIX}/lib/python"*
-
-  # then manually install static
   cd ${srcdir}/build-static-${MSYSTEM}
 
-  install -m 0644 .libs/libxml2.a "${pkgdir}${MINGW_PREFIX}"/lib/
+  make install DESTDIR="${pkgdir}"
 
   # License
   install -Dm644 "${srcdir}/${_realname}-${pkgver}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
