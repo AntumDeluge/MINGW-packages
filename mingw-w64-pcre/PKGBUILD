@@ -37,7 +37,8 @@ build() {
     --enable-pcre32 \
     --enable-pcregrep-libz \
     --enable-pcregrep-libbz2 \
-    --enable-pcretest-libedit
+    --enable-pcretest-libedit \
+    --enable-shared=no
 
   make
 }
