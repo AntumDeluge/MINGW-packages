@@ -29,7 +29,7 @@ build() {
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
-    --enable-shared \
+    --enable-shared=no \
     --enable-static
   make
 }
