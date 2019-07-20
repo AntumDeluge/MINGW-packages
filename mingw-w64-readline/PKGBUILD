@@ -50,7 +50,7 @@ build() {
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --build=${MINGW_CHOST} \
-    --enable-shared \
+    --enable-shared=no \
     --without-curses
   make
 }
