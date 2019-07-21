@@ -96,6 +96,7 @@ build() {
     --disable-native-java \
     --disable-csharp \
     --enable-static \
+    --enable-shared=no \
     --enable-threads=win32 \
     --enable-relocatable \
     --without-emacs \
@@ -107,7 +108,8 @@ build() {
     --with-included-libxml \
     --with-included-glib \
     --with-libncurses-prefix=${MINGW_PREFIX} \
-    --disable-silent-rules
+    --disable-silent-rules \
+    CPPFLAGS="-DLIBXML_STATIC"
 
   # to make relocate() in gnulib-lib work
   sed -s "s|${MINGW_PREFIX}|$(cygpath -m ${MINGW_PREFIX})|g" -i gettext-tools/config.h
