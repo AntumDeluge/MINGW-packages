@@ -13,8 +13,7 @@ depends=("${MINGW_PACKAGE_PREFIX}-wxWidgets"
          "${MINGW_PACKAGE_PREFIX}-cairo"
          "${MINGW_PACKAGE_PREFIX}-pango"
          "${MINGW_PACKAGE_PREFIX}-expat"
-         "${MINGW_PACKAGE_PREFIX}-libexif"
-         "${MINGW_PACKAGE_PREFIX}-ffmpeg")
+         "${MINGW_PACKAGE_PREFIX}-libexif")
 makedepends=("bsdtar"
              "${MINGW_PACKAGE_PREFIX}-gcc"
              "${MINGW_PACKAGE_PREFIX}-pkg-config")
@@ -37,7 +36,8 @@ build() {
       --target=${MINGW_CHOST} \
       --build=${MINGW_CHOST} \
       --enable-shared \
-      --enable-static
+      --enable-static \
+      --enable-libav=no
   make
 }
 
