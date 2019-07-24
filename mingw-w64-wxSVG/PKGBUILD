@@ -18,8 +18,7 @@ depends=("${MINGW_PACKAGE_PREFIX}-wxwidgets${_wx_basever}-msw-libs"
          "${MINGW_PACKAGE_PREFIX}-cairo"
          "${MINGW_PACKAGE_PREFIX}-pango"
          "${MINGW_PACKAGE_PREFIX}-expat"
-         "${MINGW_PACKAGE_PREFIX}-libexif"
-         "${MINGW_PACKAGE_PREFIX}-ffmpeg")
+         "${MINGW_PACKAGE_PREFIX}-libexif")
 makedepends=("${MINGW_PACKAGE_PREFIX}-autotools"
              "${MINGW_PACKAGE_PREFIX}-cc"
              "${MINGW_PACKAGE_PREFIX}-wxwidgets${_wx_basever}-msw")
@@ -52,7 +51,8 @@ build() {
       --build=${MINGW_CHOST} \
       --with-wx-config=${MINGW_PREFIX}/bin/wx-config-${_wx_basever} \
       --enable-shared \
-      --enable-static
+      --enable-static \
+      --disable-libav
   make
 }
 
