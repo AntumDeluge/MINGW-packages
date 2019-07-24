@@ -61,7 +61,7 @@ build() {
     --enable-win32 \
     --enable-win32-font \
     --enable-png \
-    --enable-shared \
+    --enable-shared=no \
     --enable-static \
     --enable-gobject \
     --enable-tee \
@@ -70,6 +70,7 @@ build() {
     --enable-fc \
     --enable-ft \
     --disable-silent-rules \
+    LIBS="-lharfbuzz -lbz2" \
     ac_cv_prog_GS=${MINGW_PREFIX}/bin/gsc
 
   make #-j1 V=1
