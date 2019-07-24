@@ -45,6 +45,9 @@ build() {
     --buildtype plain \
     -Ddefault_library=static \
     -Dgtk=disabled \
+    -Dmmx=disabled \
+    -Dsse2=disabled \
+    -Dssse3=disabled \
     ../${_realname}-${pkgver}
 
   ${MINGW_PREFIX}/bin/ninja
