@@ -61,6 +61,8 @@ build() {
     --buildtype=plain \
     --wrap-mode=nofallback \
     --default-library=both \
+    --disable-shared \
+    --enable-static \
     -Dauto_features=enabled \
     -Dxlib=disabled \
     -Dxcb=disabled \
