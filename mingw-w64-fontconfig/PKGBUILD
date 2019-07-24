@@ -55,14 +55,15 @@ build() {
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
-    --enable-shared \
+    --enable-shared=no \
     --enable-static \
     --enable-iconv \
     --with-libiconv=${MINGW_PREFIX} \
     --disable-docs \
     --with-arch=${CARCH} \
     --with-cache-dir=/var/cache/${_realname} \
-    as_ln_s="cp -pR"
+    as_ln_s="cp -pR" \
+    LIBS="-lpng -lharfbuzz -lz -lbz2"
 
   sed -i 's,all-am: Makefile $(PROGRAMS),all-am:,' test/Makefile
   make
