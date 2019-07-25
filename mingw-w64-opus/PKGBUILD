@@ -33,7 +33,7 @@ build() {
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --enable-custom-modes \
-    --enable-shared \
+    --disable-shared \
     --enable-static
 
   make
