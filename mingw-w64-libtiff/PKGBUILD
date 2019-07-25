@@ -57,40 +57,15 @@ build() {
     --without-x
 
   make
-
-  [[ -d "${srcdir}/build-${MSYSTEM}-shared" ]] && rm -rf "${srcdir}/build-${MSYSTEM}-shared"
-  mkdir -p "${srcdir}/build-${MSYSTEM}-shared" && cd "${srcdir}/build-${MSYSTEM}-shared"
-
-  ../tiff-${pkgver}/configure \
-    --prefix=${MINGW_PREFIX} \
-    --build=${MINGW_CHOST} \
-    --host=${MINGW_CHOST} \
-    --target=${MINGW_CHOST} \
-    --disable-static \
-    --enable-shared \
-    --enable-cxx \
-    --enable-jbig \
-    --enable-lerc \
-    --enable-libdeflate \
-    --enable-webp \
-    --without-x
-
-  make
 }
 
 check() {
   cd "${srcdir}/build-${MSYSTEM}-static"
   make check || true
-
-  cd "${srcdir}/build-${MSYSTEM}-shared"
-  make check || true
 }
 
 package() {
   cd "${srcdir}/build-${MSYSTEM}-static"
-  make DESTDIR="${pkgdir}" install
-
-  cd "${srcdir}/build-${MSYSTEM}-shared"
   make DESTDIR="${pkgdir}" install
 
   cp ${srcdir}/tiff-${pkgver}/libtiff/{tiffiop,tif_dir}.h "${pkgdir}${MINGW_PREFIX}/include/"
