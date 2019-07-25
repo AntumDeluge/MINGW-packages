@@ -23,7 +23,7 @@ build() {
   mkdir -p ${srcdir}/build-${MINGW_CHOST}
   cd ${srcdir}/build-${MINGW_CHOST}
   ../libogg-${pkgver}/configure \
-    --enable-shared \
+    --enable-shared=no \
     --enable-static \
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
