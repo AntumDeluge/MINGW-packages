@@ -45,30 +45,11 @@ build() {
       ../${_realname}-${pkgver}
 
   make
-
-  # Shared
-  [[ -d "${srcdir}/build-${MINGW_CHOST}-shared" ]] && rm -rf "${srcdir}/build-${MINGW_CHOST}-shared"
-  mkdir -p "${srcdir}/build-${MINGW_CHOST}-shared" && cd "${srcdir}/build-${MINGW_CHOST}-shared"
-
-  MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
-    ${MINGW_PREFIX}/bin/cmake \
-      -G'MSYS Makefiles' \
-      -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
-      "${extra_config[@]}" \
-      -DBUILD_SHARED_LIBS=ON \
-      -DBUILD_TESTING=OFF \
-      ../${_realname}-${pkgver}
-
-  make
 }
 
 package() {
   # Static
   cd "${srcdir}/build-${MINGW_CHOST}-static"
-  make DESTDIR="${pkgdir}" install
-
-  # Shared
-  cd "${srcdir}/build-${MINGW_CHOST}-shared"
   make DESTDIR="${pkgdir}" install
 
   # m4
