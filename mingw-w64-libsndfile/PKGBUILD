@@ -2,7 +2,8 @@
 
 _realname=libsndfile
 pkgbase=mingw-w64-${_realname}
-pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+pkgname_orig=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+pkgname=("${pkgname_orig}-static")
 pkgver=1.0.28
 pkgrel=1
 pkgdesc="A C library for reading and writing files containing sampled sound (mingw-w64)"
@@ -11,6 +12,8 @@ url="http://www.mega-nerd.com/libsndfile"
 license=('LGPL')
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc" "${MINGW_PACKAGE_PREFIX}-pkg-config")
 depends=("${MINGW_PACKAGE_PREFIX}-flac" "${MINGW_PACKAGE_PREFIX}-libvorbis" "${MINGW_PACKAGE_PREFIX}-speex")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=('staticlibs' 'strip')
 source=(http://www.mega-nerd.com/libsndfile/files/${_realname}-${pkgver}.tar.gz
         0003-fix-source-searches.mingw.patch)
@@ -38,8 +41,9 @@ build() {
     --disable-test-coverage \
     --enable-external-libs \
     --enable-experimental \
-    --enable-shared \
-    --enable-static
+    --enable-shared=no \
+    --enable-static \
+    VORBIS_LIBS="`pkg-config vorbis --libs --static`"
 
   make
 }
