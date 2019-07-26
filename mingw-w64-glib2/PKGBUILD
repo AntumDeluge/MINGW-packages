@@ -22,7 +22,8 @@ depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
              "${MINGW_PACKAGE_PREFIX}-meson"
              "${MINGW_PACKAGE_PREFIX}-gtk-doc"
-             "${MINGW_PACKAGE_PREFIX}-python3-setuptools")
+             "${MINGW_PACKAGE_PREFIX}-python3-setuptools"
+             "${MINGW_PACKAGE_PREFIX}-pkg-config")
 source=("https://download.gnome.org/sources/glib/${pkgver%.*}/glib-${pkgver}.tar.xz"
         0001-Update-g_fopen-g_open-and-g_creat-to-open-with-FILE_.patch
         0001-win32-Make-the-static-build-work-with-MinGW-when-pos.patch
