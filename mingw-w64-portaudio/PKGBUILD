@@ -2,7 +2,8 @@
 
 _realname=portaudio
 pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=190600_20161030
 pkgrel=3
 pkgdesc="A free, cross-platform, open source, audio I/O library (mingw-w64)"
@@ -11,6 +12,8 @@ url="http://www.portaudio.com"
 license=("custom")
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc" "${MINGW_PACKAGE_PREFIX}-pkg-config")
 depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=(!libtool strip staticlibs)
 source=("http://www.portaudio.com/archives/pa_stable_v${pkgver}.tgz"
         "fix-build.patch"
@@ -56,27 +59,9 @@ build() {
     --with-winapi=wmme,directx,wasapi,wdmks
 
   make
-
-  [[ -d "build-shared-${MINGW_CHOST}" ]] && rm -rf "build-shared-${MINGW_CHOST}"
-  mkdir -p "${srcdir}/build-shared-${MINGW_CHOST}"
-  cd "${srcdir}/build-shared-${MINGW_CHOST}"
-
-  ../${_realname}/configure \
-    --prefix=${MINGW_PREFIX} \
-    --build=${MINGW_CHOST} \
-    --host=${MINGW_CHOST} \
-    --target=${MINGW_CHOST} \
-    --enable-shared \
-    --with-dxdir=${MINGW_PREFIX}/${MINGW_CHOST} \
-    --with-winapi=wmme,directx,wasapi,wdmks
-
-  make
 }
 
 package() {
   cd "${srcdir}/build-static-${MINGW_CHOST}"
-  make DESTDIR="${pkgdir}" install
-
-  cd "${srcdir}/build-shared-${MINGW_CHOST}"
   make DESTDIR="${pkgdir}" install
 }
