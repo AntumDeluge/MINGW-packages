@@ -5,8 +5,10 @@
 
 _external_minizip=yes
 _realname=zlib
-pkgbase=mingw-w64-${_realname}
-pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+pkgbase_orig=mingw-w64-${_realname}
+pkgbase=${pkgbase_orig}-static
+pkgname_orig=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+pkgname=("${pkgname_orig}-static")
 pkgver=1.2.11
 pkgrel=7
 pkgdesc="Compression library implementing the deflate compression method found in gzip and PKZIP (mingw-w64)"
@@ -15,6 +17,8 @@ license=(ZLIB)
 url="https://www.zlib.net/"
 depends=($([[ "$_external_minizip" != "yes" ]] && echo "${MINGW_PACKAGE_PREFIX}-bzip2"))
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc" "${MINGW_PACKAGE_PREFIX}-pkg-config")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=('staticlibs')
 source=("https://zlib.net/current/${_realname}-${pkgver}.tar.gz"
         01-zlib-1.2.11-1-buildsys.mingw.patch
