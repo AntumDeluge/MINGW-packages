@@ -2,11 +2,12 @@
 
 _realname=libvorbisidec
 pkgbase=mingw-w64-${_realname}-svn
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-svn"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}-svn"
+pkgname="${pkgname_orig}-static"
 _revision=
 _fragment=
 [[ -n ${_revision} ]] && _fragment="#revision=${_revision}"
-pkgver=r19643
+pkgver=r19670
 pkgrel=1
 pkgdesc='Integer-only Ogg Vorbis decoder, AKA \"tremor\" (mingw-w64)'
 arch=('any')
@@ -14,8 +15,10 @@ url='https://svn.xiph.org/trunk/Tremor'
 license=('custom')
 depends=("${MINGW_PACKAGE_PREFIX}-libogg")
 makedepends=("subversion" "${MINGW_PACKAGE_PREFIX}-gcc")
-provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+provides=("${MINGW_PACKAGE_PREFIX}-${_realname}"
+          "${pkgname_orig}")
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}"
+           "${pkgname_orig}")
 options=('strip' 'staticlibs' '!emptydirs')
 source=("${_realname}"::"svn+https://svn.xiph.org/trunk/Tremor/${_fragment}"
         0001-add-no-undefined-for-libtool.mingw.patch
@@ -49,7 +52,9 @@ build() {
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
-    --target=${MINGW_CHOST}
+    --target=${MINGW_CHOST} \
+    --enable-shared=no \
+    --enable-static
     make
 }
 
