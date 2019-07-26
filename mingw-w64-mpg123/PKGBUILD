@@ -2,7 +2,8 @@
 
 _realname=mpg123
 pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=1.25.11
 pkgrel=1
 pkgdesc="A console based real time MPEG Audio Player for Layer 1, 2 and 3 (mingw-w64)"
@@ -18,6 +19,8 @@ depends=("${MINGW_PACKAGE_PREFIX}-libtool"
 optdepends=("${MINGW_PACKAGE_PREFIX}-openal"
             "${MINGW_PACKAGE_PREFIX}-portaudio"
             "${MINGW_PACKAGE_PREFIX}-SDL")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=('strip' 'staticlibs' 'libtool')
 source=("https://www.mpg123.com/download/mpg123-${pkgver}.tar.bz2"{,.sig})
 sha256sums=('df063307faa27c7d9efe63d2139b1564cfc7cdbb7c6f449c89ef8faabfa0eab2'
@@ -39,7 +42,7 @@ build() {
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
-    --enable-shared \
+    --enable-shared=no \
     --enable-static
 
   make
