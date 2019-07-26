@@ -60,6 +60,7 @@ build() {
     ${MINGW_PREFIX}/bin/cmake \
       -GNinja \
       -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
+      -DPA_BUILD_SHARED=OFF \
       "${extra_config[@]}" \
       ../${_realname}
 
