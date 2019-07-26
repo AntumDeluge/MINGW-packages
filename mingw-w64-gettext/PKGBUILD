@@ -113,7 +113,7 @@ build() {
     --with-included-glib \
     --with-libncurses-prefix=${MINGW_PREFIX} \
     --disable-silent-rules \
-    CPPFLAGS="-DLIBXML_STATIC"
+    CPPFLAGS="-DLIBXML_STATIC -Drelocate=libintl_relocate -Drelocate2=libintl_relocate2"
 
   # to make relocate() in gnulib-lib work
   sed -s "s|${MINGW_PREFIX}|$(cygpath -m ${MINGW_PREFIX})|g" -i gettext-tools/config.h
