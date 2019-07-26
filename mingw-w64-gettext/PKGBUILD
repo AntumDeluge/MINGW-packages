@@ -2,8 +2,10 @@
 # Contributor: Renato Silva <br.renatosilva@gmail.com>
 
 _realname=gettext
-pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgbase_orig=mingw-w64-${_realname}
+pkgbase=${pkgbase_orig}-static
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=0.19.8.1
 pkgrel=8
 arch=('any')
@@ -14,6 +16,8 @@ depends=("${MINGW_PACKAGE_PREFIX}-expat"
          #"${MINGW_PACKAGE_PREFIX}-termcap"
         )
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc" "${MINGW_PACKAGE_PREFIX}-ncurses" "git")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=('strip' 'staticlibs')
 
 # GPL3 for the package as a whole and LGPL for some parts, see the license files
