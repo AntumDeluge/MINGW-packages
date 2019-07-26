@@ -1,8 +1,10 @@
 # Maintainer: Alexey Pavlov <alexpux@gmail.com>
 
 _realname=pcre
-pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgbase_orig=mingw-w64-${_realname}
+pkgbase=${pkgbase_orig}-static
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=8.43
 pkgrel=1
 pkgdesc="A library that implements Perl 5-style regular expressions (mingw-w64)"
@@ -15,6 +17,8 @@ depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
          #"${MINGW_PACKAGE_PREFIX}-readline"
          "${MINGW_PACKAGE_PREFIX}-wineditline"
          "${MINGW_PACKAGE_PREFIX}-zlib")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=('staticlibs' 'strip')
 source=(https://ftp.pcre.org/pub/pcre/${_realname}-${pkgver}.tar.bz2{,.sig})
 sha256sums=('91e762520003013834ac1adb4a938d53b22a216341c061b0cf05603b290faf6b'
