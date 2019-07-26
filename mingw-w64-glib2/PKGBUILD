@@ -5,7 +5,8 @@
 
 _realname=glib2
 pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=2.60.4
 pkgrel=2
 url="https://www.gtk.org/"
@@ -24,6 +25,8 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
              "${MINGW_PACKAGE_PREFIX}-gtk-doc"
              "${MINGW_PACKAGE_PREFIX}-python3-setuptools"
              "${MINGW_PACKAGE_PREFIX}-pkg-config")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 source=("https://download.gnome.org/sources/glib/${pkgver%.*}/glib-${pkgver}.tar.xz"
         0001-Update-g_fopen-g_open-and-g_creat-to-open-with-FILE_.patch
         0001-win32-Make-the-static-build-work-with-MinGW-when-pos.patch
@@ -60,27 +63,10 @@ build() {
     -Dforce_posix_threads=true \
     "../glib-${pkgver}"
   ninja
-
-  msg "Build shared version"
-  [[ -d "${srcdir}"/build-${CARCH}-shared ]] && rm -rf "${srcdir}"/build-${CARCH}-shared
-  mkdir "${srcdir}"/build-${CARCH}-shared && cd "${srcdir}"/build-${CARCH}-shared
-
-  meson \
-    --buildtype=plain \
-    -Ddefault_library=shared \
-    -Dman=true \
-    -Dforce_posix_threads=true \
-    -Dgtk_doc=true \
-    "../glib-${pkgver}"
-
-  ninja
 }
 
 package() {
   cd "${srcdir}/build-${CARCH}-static"
-  DESTDIR="${pkgdir}${MINGW_PREFIX}" ninja install
-
-  cd "${srcdir}/build-${CARCH}-shared"
   DESTDIR="${pkgdir}${MINGW_PREFIX}" ninja install
 
   install -Dm644 "${srcdir}/glib-${pkgver}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
