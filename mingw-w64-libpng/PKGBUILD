@@ -2,7 +2,8 @@
 
 _realname=libpng
 pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=1.6.37
 _apngver=1.6.37
 pkgrel=3
@@ -12,6 +13,8 @@ depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
          "${MINGW_PACKAGE_PREFIX}-zlib")
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
              "${MINGW_PACKAGE_PREFIX}-pkg-config")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 license=('custom')
 url="http://www.libpng.org/pub/png/libpng.html"
 options=('strip' '!libtool' 'staticlibs')
