@@ -1,0 +1,17 @@
+--- fluidsynth-2.0.5/src/CMakeLists.txt.orig	2019-07-27 22:12:36.959831100 +0000
++++ fluidsynth-2.0.5/src/CMakeLists.txt	2019-07-27 22:12:41.921659500 +0000
+@@ -319,9 +319,12 @@
+     ${ALSA_LIBRARIES}
+     ${PULSE_LIBRARIES}
+     ${PORTAUDIO_LIBRARIES}
+-    ${LIBSNDFILE_LIBRARIES}
++    ${LIBSNDFILE_STATIC_LIBRARIES}
+     ${DBUS_LIBRARIES}
+-    ${READLINE_LIBS}
++    ${READLINE_STATIC_LIBS}
++    readline
++    history
++    termcap
+     ${DART_LIBS}
+     ${COREAUDIO_LIBS}
+     ${COREMIDI_LIBS}

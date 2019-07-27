@@ -22,9 +22,11 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-pkg-config"
              "${MINGW_PACKAGE_PREFIX}-cc")
 options=('strip' 'staticlibs')
 source=("${_realname}-${pkgver}.tar.gz::https://github.com/FluidSynth/${_realname}/archive/v${pkgver}.tar.gz"
-        "010-no-undefined.patch")
+        "010-no-undefined.patch"
+        "001-fluidsynth-2.0.5-staticlink.patch")
 sha256sums=('7c29a5cb7a2755c8012d941d1335da7bda957bbb0a86b7c59215d26773bb51fe'
-            '8b865ac2b0ea760f3c5fa640573793131a09cdc7af833ab6fd8f69b583e41153')
+            '8b865ac2b0ea760f3c5fa640573793131a09cdc7af833ab6fd8f69b583e41153'
+            '03b4efa52ae97228bf21b56fc56e049b34ace6cedfb2e6b8ff5322eaf02344fe')
 noextract=("${_realname}-${pkgver}.tar.gz")
 
 prepare() {
@@ -33,6 +35,7 @@ prepare() {
 
     cd "${_realname}-${pkgver}"
     patch -p1 -i ${srcdir}/010-no-undefined.patch
+    patch -p1 -i ${srcdir}/001-fluidsynth-2.0.5-staticlink.patch
 }
 
 build() {
@@ -51,7 +54,7 @@ build() {
       -G'Ninja' \
       -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
       "${extra_config[@]}" \
-      -DBUILD_SHARED_LIBS=ON \
+      -DBUILD_SHARED_LIBS=OFF \
       -Denable-portaudio=ON \
       -Denable-dbus=OFF \
       ../${_realname}-${pkgver}
