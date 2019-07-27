@@ -2,7 +2,8 @@
 
 _realname=fluidsynth
 pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=2.0.5
 pkgrel=1
 pkgdesc="A real-time software synthesizer based on the SoundFont 2 specifications (mingw-w64)"
@@ -18,9 +19,18 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
              "${MINGW_PACKAGE_PREFIX}-pkg-config"
              "${MINGW_PACKAGE_PREFIX}-libtool"
              "${MINGW_PACKAGE_PREFIX}-cmake")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=('strip' 'staticlibs')
-source=("${_realname}-${pkgver}.tar.gz::https://github.com/FluidSynth/${_realname}/archive/v${pkgver}.tar.gz")
-sha256sums=('69b244512883491e7e66b4d0151c61a0d6d867d4d2828c732563be0f78abcc51')
+source=("${_realname}-${pkgver}.tar.gz::https://github.com/FluidSynth/${_realname}/archive/v${pkgver}.tar.gz"
+        "001-fluidsynth-2.0.5-staticlink.patch")
+sha256sums=('69b244512883491e7e66b4d0151c61a0d6d867d4d2828c732563be0f78abcc51'
+            '03b4efa52ae97228bf21b56fc56e049b34ace6cedfb2e6b8ff5322eaf02344fe')
+
+prepare() {
+  cd "${srcdir}/${_realname}-${pkgver}"
+  patch -p1 -i "${startdir}/001-fluidsynth-2.0.5-staticlink.patch"
+}
 
 build() {
   [[ -d "${srcdir}"/build-${CARCH} ]] && rm -rf "${srcdir}"/build-${CARCH}
@@ -38,7 +48,7 @@ build() {
       -G'MSYS Makefiles' \
       -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
       "${extra_config[@]}" \
-      -DBUILD_SHARED_LIBS=ON \
+      -DBUILD_SHARED_LIBS=OFF \
       -Denable-portaudio=ON \
       -Denable-dbus=OFF \
       ../${_realname}-${pkgver}
