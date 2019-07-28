@@ -14,7 +14,6 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
 depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
          "${MINGW_PACKAGE_PREFIX}-SDL2"
          "${MINGW_PACKAGE_PREFIX}-flac"
-         "${MINGW_PACKAGE_PREFIX}-fluidsynth"
          "${MINGW_PACKAGE_PREFIX}-libvorbis"
          "${MINGW_PACKAGE_PREFIX}-libmodplug"
          "${MINGW_PACKAGE_PREFIX}-mpg123"
@@ -54,7 +53,7 @@ build() {
     --disable-music-mp3-mpg123-shared \
     --enable-music-opus \
     --disable-music-opus-shared \
-    --disable-music-midi-fluidsynth-shared \
+    --disable-music-midi-fluidsynth \
     --disable-music-mod-modplug-shared
 
   make
