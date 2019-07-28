@@ -21,16 +21,19 @@ depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
 options=('staticlibs' 'strip')
 source=("$url/release/${_realname}-${pkgver}.zip"
         SDL2_mixer-2.0.1-find_lib.mingw.patch
-        SDL2_mixer-2.0.1-libtool_windres.mingw.patch)
+        SDL2_mixer-2.0.1-libtool_windres.mingw.patch
+        SDL2_mixer-2.0.4-mpg123_libshlwapi.mingw.patch)
 sha256sums=('9affb8c7bf6fbffda0f6906bfb99c0ea50dca9b188ba9e15be90042dc03c5ded'
             '8c906b09cb9318b54dac6b63eff49e63fb83bf1fc97219581b720709723ce5c1'
-            '86fa38c76b834ea28d40c95d4639cf7896f449fe92a4348d21da641106a53132')
+            '86fa38c76b834ea28d40c95d4639cf7896f449fe92a4348d21da641106a53132'
+            'cf2b5501ac607bdbd6f162f81ac468b1e01748e266d88e76cf959dfbb870c48f')
 
 prepare() {
   cd "${srcdir}/${_realname}-${pkgver}"
 
   patch -Np1 -i ${srcdir}/SDL2_mixer-2.0.1-find_lib.mingw.patch
   patch -Np1 -i ${srcdir}/SDL2_mixer-2.0.1-libtool_windres.mingw.patch
+  patch -Np1 -i ${srcdir}/SDL2_mixer-2.0.4-mpg123_libshlwapi.mingw.patch
   autoconf
 }
 

@@ -1,0 +1,11 @@
+--- SDL2_mixer-2.0.4/configure.in.orig	2019-07-28 05:25:21.951574300 +0000
++++ SDL2_mixer-2.0.4/configure.in	2019-07-28 05:29:57.342891500 +0000
+@@ -618,7 +618,7 @@
+               [], [enable_music_mp3_mpg123_shared=yes])
+ if test x$enable_music_mp3_mpg123 = xyes; then
+     AC_CHECK_HEADER([mpg123.h], [have_mpg123_hdr=yes])
+-    AC_CHECK_LIB([mpg123], [mpg123_replace_reader_handle], [have_mpg123_lib=yes])
++    AC_CHECK_LIB([mpg123], [mpg123_replace_reader_handle], [have_mpg123_lib=yes], [], [-lshlwapi])
+     if test x$have_mpg123_hdr = xyes -a x$have_mpg123_lib = xyes; then
+         have_libmpg123=yes
+         case "$host" in
