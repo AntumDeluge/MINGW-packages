@@ -3,7 +3,8 @@
 
 _realname=pixman
 pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=0.38.4
 pkgrel=1
 pkgdesc="The pixel-manipulation library for X and cairo (mingw-w64)"
@@ -16,6 +17,8 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
              "${MINGW_PACKAGE_PREFIX}-meson"
              "${MINGW_PACKAGE_PREFIX}-ninja")
 depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=('staticlibs' 'strip')
 source=("https://xorg.freedesktop.org/releases/individual/lib/pixman-${pkgver}.tar.bz2"
         "0001-meson-define-SIZEOF_LONG-and-use-Wundef.patch"
