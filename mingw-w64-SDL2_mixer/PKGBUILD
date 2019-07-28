@@ -57,7 +57,10 @@ build() {
     --enable-music-opus \
     --disable-music-opus-shared \
     --disable-music-midi-fluidsynth \
-    --disable-music-mod-modplug-shared
+    --disable-music-mod-modplug-shared \
+    CPPFLAGS="-DMODPLUG_STATIC" \
+    OPUSFILE_LIBS="`pkg-config opusfile --libs --static`" \
+    MODPLUG_LIBS="`pkg-config libmodplug --libs --static`"
 
   make
 }
