@@ -20,14 +20,17 @@ depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs"
          "${MINGW_PACKAGE_PREFIX}-mpg123"
          "${MINGW_PACKAGE_PREFIX}-opusfile")
 options=('staticlibs' 'strip')
-source=("https://github.com/libsdl-org/SDL_mixer/releases/download/release-${pkgver}/SDL2_mixer-${pkgver}.zip"{,.sig})
+source=("https://github.com/libsdl-org/SDL_mixer/releases/download/release-${pkgver}/SDL2_mixer-${pkgver}.zip"{,.sig}
+        'SDL2_mixer-2.0.4-mpg123_libshlwapi.mingw.patch')
 sha256sums=('788c748c1d3a87126511e60995b03526ed4e31e2ba053dffd9dcc8abde97b950'
-            'SKIP')
+            'SKIP'
+            'cf2b5501ac607bdbd6f162f81ac468b1e01748e266d88e76cf959dfbb870c48f')
 validpgpkeys=('1528635D8053A57F77D1E08630A59377A7763BE6') # Sam Lantinga <slouken@libsdl.org>
 
 prepare() {
   cd "${srcdir}/${_realname}-${pkgver}"
 
+  patch -Np1 -i ${srcdir}/SDL2_mixer-2.0.4-mpg123_libshlwapi.mingw.patch
 }
 
 build() {
