@@ -72,7 +72,10 @@ build() {
     --host=${MINGW_CHOST} \
     --enable-shared \
     --disable-static \
-    "${_common_config[@]}"
+    "${_common_config[@]}" \
+    CPPFLAGS="-DMODPLUG_STATIC" \
+    OPUSFILE_LIBS="`pkg-config opusfile --libs --static`" \
+    MODPLUG_LIBS="`pkg-config libmodplug --libs --static`"
 
   make
 }
