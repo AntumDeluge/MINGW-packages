@@ -2,7 +2,8 @@
 
 _realname=libexif
 pkgbase=mingw-w64-${_realname}
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname_orig="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname="${pkgname_orig}-static"
 pkgver=0.6.21
 pkgrel=4
 pkgdesc="A library to parse an EXIF file and read the data from those tags (mingw-w64)"
@@ -11,6 +12,8 @@ url="https://libexif.github.io/"
 license=("LGPL")
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc" "${MINGW_PACKAGE_PREFIX}-pkg-config")
 depends=("${MINGW_PACKAGE_PREFIX}-gettext")
+provides=("${pkgname_orig}")
+conflicts=("${pkgname_orig}")
 options=(!libtool strip)
 source=(https://github.com/libexif/libexif/archive/libexif-${pkgver//./_}-release.tar.gz)
 sha256sums=('8cb37aa1745ca9050403c501ad4da2924e98ec5460bbd5c9d09bd57f0c746636')
@@ -29,7 +32,7 @@ build() {
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --disable-docs \
-    --enable-shared \
+    --enable-shared=no \
     --enable-static
 
   make
