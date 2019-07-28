@@ -30,7 +30,7 @@ build() {
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
     --disable-docs \
-    --enable-shared \
+    --disable-shared \
     --enable-static
 
   make
