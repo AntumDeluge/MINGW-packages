@@ -1,0 +1,33 @@
+# Maintainer: Jordan Irwin <antumdeluge@gmail.com>
+
+pkgname=cxxopts
+pkgver=2.2.0
+pkgrel=1
+pkgdesc='Lightweight C++ command line option parser'
+arch=('any')
+url="https://github.com/jarro2783/${pkgname}"
+license=('MIT')
+source=("${url}/archive/v${pkgver}.tar.gz")
+sha256sums=('447dbfc2361fce9742c5d1c9cfb25731c977b405f9085a738fbd608626da8a4d')
+makedepends=("${MINGW_PACKAGE_PREFIX}-cmake")
+_dirbuild="build-${CARCH}"
+
+build() {
+	[[ -d "${srcdir}/${_dirbuild}" ]] && rm -rf "${srcdir}/${_dirbuild}"
+	mkdir -p "${srcdir}/${_dirbuild}" && cd "${srcdir}/${_dirbuild}"
+
+	MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
+	"${MINGW_PREFIX}/bin/cmake" \
+		-G "MSYS Makefiles" \
+		-DCMAKE_INSTALL_PREFIX="${MINGW_PREFIX}" \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCXXOPTS_BUILD_EXAMPLES=OFF \
+		"${srcdir}/${pkgname}-${pkgver}"
+
+	make
+}
+
+package() {
+	cd "${srcdir}/${_dirbuild}"
+	make install DESTDIR="${pkgdir}"
+}
