@@ -1,0 +1,68 @@
+# Maintainer: Jordan Irwin <antumdeluge@gmail.com>
+
+_realname=wxsvg
+_wx_basever=3.1
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-wx${_wx_basever}"
+pkgbase="mingw-w64-${_realname}-wx${_wx_basever}"
+pkgver=1.5.23
+pkgrel=1
+pkgdesc='A C++ library to create, manipulate and render SVG files (mingw-w64)'
+arch=(any)
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
+url='https://wxsvg.sourceforge.io/'
+license=('custom:wxWindows')
+conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}-wx3.0")
+depends=("${MINGW_PACKAGE_PREFIX}-wxmsw${_wx_basever}"
+         "${MINGW_PACKAGE_PREFIX}-cairo"
+         "${MINGW_PACKAGE_PREFIX}-pango"
+         "${MINGW_PACKAGE_PREFIX}-expat"
+         "${MINGW_PACKAGE_PREFIX}-libexif"
+         "${MINGW_PACKAGE_PREFIX}-ffmpeg")
+makedepends=("${MINGW_PACKAGE_PREFIX}-autotools"
+             "${MINGW_PACKAGE_PREFIX}-cc")
+_url_src='https://downloads.sourceforge.net/project/wxsvg/wxsvg'
+source=("${_url_src}/${pkgver}/wxsvg-${pkgver}.tar.bz2"
+        "gcc11-fix.patch")
+sha256sums=('3f07361facc7d18cc19a940dd73c78142ed5eec38c14d993a85bf0c061dcabb9'
+            'ac7b984f9ce4f051858ada88284545f4373b27a0b1200fe9f646467bd6c9f3bd')
+_dir_extract="${_realname}-${pkgver}"
+_dir_build="build-${CARCH}"
+
+prepare() {
+  cd "${srcdir}/${_dir_extract}"
+
+  # mediadec_ffmpeg.h has a "using namespace std" conflicting with system headers.
+  # ideally that would be moved to the cpp files, but the diff is too large
+  patch -p1 -i "${srcdir}"/gcc11-fix.patch
+
+  # autoreconf to get updated libtool files with clang support
+  autoreconf -fiv
+}
+
+build() {
+  [[ -d "${srcdir}/${_dir_build}" ]] && rm -rf "${srcdir}/${_dir_build}"
+  mkdir -p "${srcdir}/${_dir_build}" && cd "${srcdir}/${_dir_build}"
+
+  ../${_dir_extract}/configure \
+      --prefix=${MINGW_PREFIX} \
+      --host=${MINGW_CHOST} \
+      --target=${MINGW_CHOST} \
+      --build=${MINGW_CHOST} \
+      --with-wx-config=${MINGW_PREFIX}/bin/wx-config-${_wx_basever} \
+      --enable-shared \
+      --enable-static
+  make
+}
+
+check() {
+  cd "${srcdir}/${_dir_build}"
+  make -k check
+}
+
+package() {
+  cd "${srcdir}/${_dir_build}"
+  make install DESTDIR="${pkgdir}"
+
+  # license
+  install -Dm644 "${srcdir}/${_dir_extract}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
+}
