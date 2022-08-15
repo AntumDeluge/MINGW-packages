@@ -1,34 +1,34 @@
 # Maintainer: Jordan Irwin <antumdeluge@gmail.com>
 
 _realname=wxsvg
-_wx_basever=3.0
-pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}-wx3.0"
+         "${MINGW_PACKAGE_PREFIX}-${_realname}-wx3.1"
+         "${MINGW_PACKAGE_PREFIX}-${_realname}-wx3.2")
 pkgbase="mingw-w64-${_realname}"
 pkgver=1.5.23
-pkgrel=2
+pkgrel=3
 pkgdesc="A C++ library to create, manipulate and render SVG files (mingw-w64)"
 arch=(any)
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url="https://wxsvg.sourceforge.io/"
 license=("custom:wxWindows")
-depends=("${MINGW_PACKAGE_PREFIX}-wxwidgets${_wx_basever}-msw-libs"
-         "${MINGW_PACKAGE_PREFIX}-cairo"
+depends=("${MINGW_PACKAGE_PREFIX}-cairo"
          "${MINGW_PACKAGE_PREFIX}-pango"
          "${MINGW_PACKAGE_PREFIX}-expat"
          "${MINGW_PACKAGE_PREFIX}-libexif"
          "${MINGW_PACKAGE_PREFIX}-ffmpeg")
 makedepends=("${MINGW_PACKAGE_PREFIX}-autotools"
              "${MINGW_PACKAGE_PREFIX}-cc"
-             "${MINGW_PACKAGE_PREFIX}-wxwidgets${_wx_basever}-msw")
+             "${MINGW_PACKAGE_PREFIX}-wxwidgets3.0-msw"
+             "${MINGW_PACKAGE_PREFIX}-wxwidgets3.2-msw")
 source=("https://downloads.sourceforge.net/project/wxsvg/wxsvg/${pkgver}/wxsvg-${pkgver}.tar.bz2"
         "gcc11-fix.patch")
 sha256sums=('3f07361facc7d18cc19a940dd73c78142ed5eec38c14d993a85bf0c061dcabb9'
             'ac7b984f9ce4f051858ada88284545f4373b27a0b1200fe9f646467bd6c9f3bd')
-extractdir="${_realname}-${pkgver}"
-builddir="build-${CARCH}"
+_dir_extract="${_realname}-${pkgver}"
 
 prepare() {
-  cd "${srcdir}/${extractdir}"
+  cd "${srcdir}/${_dir_extract}"
 
   # mediadec_ffmpeg.h has a "using namespace std" conflicting with system headers.
   # ideally that would be moved to the cpp files, but the diff is too large
@@ -38,30 +38,85 @@ prepare() {
   autoreconf -fiv
 }
 
-build() {
-  [[ -d "${srcdir}/${builddir}" ]] && rm -rf "${srcdir}/${builddir}"
-  mkdir -p "${srcdir}/${builddir}" && cd "${srcdir}/${builddir}"
+do_build() {
+  _dir_build="${srcdir}/build-${CARCH}-wx$1"
+  [[ -d "${_dir_build}" ]] && rm -rf "${_dir_build}"
+  mkdir -p "${_dir_build}" && cd "${_dir_build}"
 
-  ../${extractdir}/configure \
+  ../${_dir_extract}/configure \
       --prefix=${MINGW_PREFIX} \
       --host=${MINGW_CHOST} \
       --target=${MINGW_CHOST} \
       --build=${MINGW_CHOST} \
-      --with-wx-config=${MINGW_PREFIX}/bin/wx-config-${_wx_basever} \
+      --with-wx-config=${MINGW_PREFIX}/bin/wx-config-$1 \
       --enable-shared \
       --enable-static
   make
 }
 
-check() {
-  cd "${srcdir}/${builddir}"
-  make -k check
+build() {
+  for _wx_basever in 3.0 3.1 3.2; do
+    do_build ${_wx_basever}
+  done
 }
 
-package() {
-  cd "${srcdir}/${builddir}"
-  make install DESTDIR="${pkgdir}"
+check() {
+  for _wx_basever in 3.0 3.1 3.2; do
+    cd "${srcdir}/build-${CARCH}-wx${_wx_basever}"
+    make -k check
+  done
+}
+
+do_package() {
+  _pkg_dir=$1
+
+  cd "${srcdir}/build-${CARCH}-wx$2"
+  make install DESTDIR="${_pkg_dir}"
 
   # license
-  install -Dm644 "${srcdir}/${extractdir}/COPYING" "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
+  install -Dm644 "${srcdir}/${_dir_extract}/COPYING" "${_pkg_dir}${MINGW_PREFIX}/share/licenses/${_realname}/COPYING"
 }
+
+package_wxsvg-wx3.0() {
+  _wx_basever=3.0
+
+  provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+  conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
+  depends=("${depends[@]}"
+           "${MINGW_PACKAGE_PREFIX}-wxwidgets${_wx_basever}-msw-libs")
+
+  do_package "${pkgdir}" ${_wx_basever}
+}
+
+package_wxsvg-wx3.1() {
+  _wx_basever=3.1
+
+  conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}-wx3.0")
+  depends=("${depends[@]}"
+           "${MINGW_PACKAGE_PREFIX}-wxmsw${_wx_basever}")
+
+  do_package "${pkgdir}" ${_wx_basever}
+}
+
+package_wxsvg-wx3.2() {
+  _wx_basever=3.2
+
+  conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}-wx3.0"
+             "${MINGW_PACKAGE_PREFIX}-${_realname}-wx3.1")
+  depends=("${depends[@]}"
+           "${MINGW_PACKAGE_PREFIX}-wxwidgets${_wx_basever}-msw-libs")
+
+  do_package "${pkgdir}" ${_wx_basever}
+}
+
+
+# template start; name=mingw-w64-splitpkg-wrappers; version=1.0;
+# vim: set ft=bash :
+
+# generate wrappers
+for _name in "${pkgname[@]}"; do
+  _short="package_${_name#${MINGW_PACKAGE_PREFIX}-}"
+  _func="$(declare -f "${_short}")"
+  eval "${_func/#${_short}/package_${_name}}"
+done
+# template end;
