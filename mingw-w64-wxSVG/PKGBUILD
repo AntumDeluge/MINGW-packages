@@ -50,7 +50,7 @@ build() {
       --target=${MINGW_CHOST} \
       --build=${MINGW_CHOST} \
       --with-wx-config=${MINGW_PREFIX}/bin/wx-config-${_wx_basever} \
-      --enable-shared \
+      --disable-shared \
       --enable-static \
       --disable-libav
   make
