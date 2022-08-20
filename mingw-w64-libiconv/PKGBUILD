@@ -51,7 +51,7 @@ build() {
     --target=${MINGW_CHOST} \
     --docdir=${MINGW_PREFIX}/share/doc/libiconv \
     --enable-static \
-    --enable-shared \
+    --disable-shared \
     --enable-extra-encodings \
     --enable-relocatable \
     --disable-rpath \
@@ -59,11 +59,6 @@ build() {
     --enable-nls
 
   make
-}
-
-check() {
-  cd "${srcdir}/build-${MSYSTEM}"
-  make check || msg2 "tests failed"
 }
 
 package_libiconv() {
